@@ -1,0 +1,31 @@
+openapi: "1.0.0"
+info:
+  title: Tshirt store API
+  description: Developer Website
+  version: 1.0.0
+  contact:
+    email: gokulprathin8@gmail.com
+    url: "https://linkedin.com/gokulprathin8"
+servers:
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: for developerment
+    variables:
+      version:
+        enum:
+          - v1
+          - v2
+        default: v1
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+components:
+  securityScehems:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
