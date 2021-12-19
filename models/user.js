@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const userSchema = mongoose.Schema({
@@ -60,6 +61,14 @@ userSchema.methods.getJwtToken = function() {
     jwt.sign({id: this._id}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRY
     })
+}
+
+// generate forgot password token
+userSchema.methods.getForgotPasswordToken = function() {
+    const forgotToken = crypto.randomBytes(20).toString('hex');
+    this.forgotPasswordToken = crypto.createHash('sha256').update(forgotToken).digest('hex');
+    this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000;
+    return forgotToken;
 }
 
 module.exports = mongoose.model('user', userSchema);
